@@ -38,6 +38,18 @@ public class Post implements Serializable {
     @OneToMany(mappedBy = "postId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments;
 
+    // Constructors
+    public Post() {
+    }
+
+    public Post(Integer id, String title, String postUrl, int voteCount, Integer userId) {
+        this.id = id;
+        this.title = title;
+        this.postUrl = postUrl;
+        this.voteCount = voteCount;
+        this.userId = userId;
+    }
+
     // Getters and Setters
     public Integer getId() {
         return id;

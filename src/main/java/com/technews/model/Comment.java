@@ -17,6 +17,18 @@ public class Comment implements Serializable {
     private Integer userId;
     private Integer postId;
 
+    // Constructors
+    public Comment() {
+    }
+
+    public Comment(Integer id, String commentText, Integer userId, Integer postId) {
+        this.id = id;
+        this.commentText = commentText;
+        this.userId = userId;
+        this.postId = postId;
+    }
+
+    // Getters and Setters
     public Integer getId() {
         return id;
     }
@@ -49,6 +61,7 @@ public class Comment implements Serializable {
         this.postId = postId;
     }
 
+    // Overrides for equals(), hashCode(), and toString()
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
