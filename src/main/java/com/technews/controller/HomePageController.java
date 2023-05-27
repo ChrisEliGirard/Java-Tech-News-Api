@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-// @Controller indicates that this controller will control the front-end flow
 @Controller
 public class HomePageController {
     @Autowired
@@ -33,6 +32,7 @@ public class HomePageController {
 
     @GetMapping("/login")
     public String login(Model model, HttpServletRequest request) {
+
         if (request.getSession(false) != null) {
             return "redirect:/";
         }
@@ -60,17 +60,18 @@ public class HomePageController {
             model.addAttribute("loggedIn", false);
         }
 
+
         List<Post> postList = postRepository.findAll();
         for (Post p : postList) {
             p.setVoteCount(voteRepository.countVotesByPostId(p.getId()));
-            User user = userRepository.getById(p.getUserId());
+            User user = userRepository.getReferenceById(p.getUserId());
             p.setUserName(user.getUsername());
         }
 
         model.addAttribute("postList", postList);
         model.addAttribute("loggedIn", sessionUser.isLoggedIn());
 
-        // "point" and "points" attributes refer to upvotes
+        // "point" and "points" attributes refer to upvotes.
         model.addAttribute("point", "point");
         model.addAttribute("points", "points");
 
@@ -78,7 +79,8 @@ public class HomePageController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboardPageSetup(Model model, HttpServletRequest request) {
+    public String dashboardPageSetup(Model model, HttpServletRequest request) throws Exception {
+
         if (request.getSession(false) != null) {
             setupDashboardPage(model, request);
             return "dashboard";
@@ -95,6 +97,7 @@ public class HomePageController {
         return "dashboard";
     }
 
+
     @GetMapping("/singlePostEmptyComment/{id}")
     public String singlePostEmptyCommentHandler(@PathVariable int id, Model model, HttpServletRequest request) {
         setupSinglePostPage(id, model, request);
@@ -102,11 +105,13 @@ public class HomePageController {
         return "single-post";
     }
 
+
     @GetMapping("/post/{id}")
     public String singlePostPageSetup(@PathVariable int id, Model model, HttpServletRequest request) {
         setupSinglePostPage(id, model, request);
         return "single-post";
     }
+
 
     @GetMapping("/editPostEmptyComment/{id}")
     public String editPostEmptyCommentHandler(@PathVariable int id, Model model, HttpServletRequest request) {
@@ -120,6 +125,7 @@ public class HomePageController {
         }
     }
 
+
     @GetMapping("/dashboard/edit/{id}")
     public String editPostPageSetup(@PathVariable int id, Model model, HttpServletRequest request) {
         if (request.getSession(false) != null) {
@@ -130,6 +136,8 @@ public class HomePageController {
             return "login";
         }
     }
+
+
 
     public Model setupDashboardPage(Model model, HttpServletRequest request) throws Exception {
         User sessionUser = (User) request.getSession().getAttribute("SESSION_USER");
@@ -150,6 +158,7 @@ public class HomePageController {
 
         return model;
     }
+
 
     public Model setupSinglePostPage(int id, Model model, HttpServletRequest request) {
         if (request.getSession(false) != null) {
@@ -173,6 +182,7 @@ public class HomePageController {
 
         return model;
     }
+
 
     public Model setupEditPostPage(int id, Model model, HttpServletRequest request) {
         if (request.getSession(false) != null) {
